@@ -130,12 +130,12 @@ app.delete("/seoul/:id", (req, res) => {
 });
 app.put("/seoul/:id", (req, res) => {
   const { id } = req.params;
-  FoodListSchema.updateOne(
-    { _id: id },
-    { $set: { comment: req.body.comment } }
-  ).then((response) => {
-    res.json(response);
-  });
+  console.log(req.body);
+  FoodListSchema.updateOne({ _id: id }, { $set: { ...req.body } }).then(
+    (response) => {
+      res.json(response);
+    }
+  );
 });
 
 app.get("/place/seoul/:filter", (req, res) => {
