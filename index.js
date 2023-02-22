@@ -29,10 +29,7 @@ const diskStorage = multer.diskStorage({
   //     done(null, path.join(__dirname, "/upload"));
   //   },
   filename: (req, file, done) => {
-    done(
-      null,
-      file.originalname.split(".")[0] + "-" + path.extname(file.originalname)
-    );
+    done(null, file.originalname);
   },
 });
 const fileUpload = multer({ storage: diskStorage });
