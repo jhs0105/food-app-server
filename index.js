@@ -162,12 +162,11 @@ app.delete("/ilsan/:id", (req, res) => {
 });
 app.put("/ilsan/:id", (req, res) => {
   const { id } = req.params;
-  IlsanFoodListSchema.updateOne(
-    { _id: id },
-    { $set: { comment: req.body.comment } }
-  ).then((response) => {
-    res.json(response);
-  });
+  IlsanFoodListSchema.updateOne({ _id: id }, { $set: { ...req.body } }).then(
+    (response) => {
+      res.json(response);
+    }
+  );
 });
 
 app.get("/place/ilsan/:filter", (req, res) => {
