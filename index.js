@@ -9,7 +9,6 @@ const cors = require("cors");
 const FoodListSchema = require("./models/FoodListSchema");
 const IlsanFoodListSchema = require("./models/IlsanFoodListSchema");
 const multer = require("multer");
-const { response } = require("express");
 
 app.use(cors());
 app.use(express.json());
