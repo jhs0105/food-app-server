@@ -31,10 +31,7 @@ const diskStorage = multer.diskStorage({
     done(null, file.originalname);
   },
 });
-const fileUpload = multer({
-  storage: diskStorage,
-  limits: { fileSize: 1024 * 1024 },
-});
+const fileUpload = multer({ storage: diskStorage });
 
 app.get("/", (req, res) => {
   res.send("hello");
