@@ -8,6 +8,7 @@ const db = require("./db/db");
 const cors = require("cors");
 const FoodListSchema = require("./models/FoodListSchema");
 const IlsanFoodListSchema = require("./models/IlsanFoodListSchema");
+const JejuFoodListSchema = require("./models/JejuFoodListSchema");
 const multer = require("multer");
 
 app.use(cors());
@@ -100,6 +101,38 @@ app.post("/insertilsan", fileUpload.single("foodImage"), (req, res) => {
   });
 });
 
+app.post("/insertjeju", fileUpload.single("foodImage"), (req, res) => {
+  const name = req.body.name;
+  const place = req.body.place;
+  const address = req.body.address;
+  const score = req.body.score;
+  const mainFood = req.body.mainFood;
+  const comment = req.body.comment;
+  const foodImage = req.file.path;
+  console.log(foodImage);
+  console.log(comment);
+  cloudinary.uploader.upload(req.file.path, (result) => {
+    const newFoodList = new JejuFoodListSchema({
+      name,
+      place,
+      address,
+      score,
+      mainFood,
+      foodImage: result.url,
+      comment,
+    });
+    newFoodList
+      .save()
+      .then((result) => {
+        console.log(result);
+        res.json("파일저장");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+});
+
 app.get("/seoul", (req, res) => {
   FoodListSchema.find()
     .then((result) => {
@@ -167,10 +200,47 @@ app.put("/ilsan/:id", (req, res) => {
     }
   );
 });
-
 app.get("/place/ilsan/:filter", (req, res) => {
   const { filter } = req.params;
   IlsanFoodListSchema.find({ place: filter }).then((response) => {
+    res.json(response);
+  });
+});
+
+app.get("/jeju", (req, res) => {
+  JejuFoodListSchema.find()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+app.get("/jeju/:id", (req, res) => {
+  const { id } = req.params;
+  JejuFoodListSchema.find({ _id: id }).then((response) => {
+    res.json(response);
+  });
+});
+app.delete("/jeju/:id", (req, res) => {
+  const { id } = req.params;
+  JejuFoodListSchema.deleteOne({ _id: id }).then((response) => {
+    res.json(response);
+  });
+});
+app.put("/jeju/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(req.body);
+  JejuFoodListSchema.updateOne({ _id: id }, { $set: { ...req.body } }).then(
+    (response) => {
+      res.json(response);
+    }
+  );
+});
+
+app.get("/place/jeju/:filter", (req, res) => {
+  const { filter } = req.params;
+  JejuFoodListSchema.find({ place: filter }).then((response) => {
     res.json(response);
   });
 });
