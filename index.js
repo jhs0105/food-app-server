@@ -34,9 +34,19 @@ const diskStorage = multer.diskStorage({
 });
 const fileUpload = multer({ storage: diskStorage });
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // 모든 도메인에서 접근 허용
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("hello");
 });
+
 app.post("/insertseoul", fileUpload.single("foodImage"), (req, res) => {
   const name = req.body.name;
   const place = req.body.place;
