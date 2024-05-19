@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const cloudinary = require("cloudinary");
+const cloudinary = request("cloudinary").v2;
+import { v2 as cloudinary } from "cloudinary";
 const dotenv = require("dotenv");
 dotenv.config();
 const db = require("./db/db");
@@ -10,10 +11,12 @@ const FoodListSchema = require("./models/FoodListSchema");
 const IlsanFoodListSchema = require("./models/IlsanFoodListSchema");
 const JejuFoodListSchema = require("./models/JejuFoodListSchema");
 const multer = require("multer");
+const { request } = require("http");
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "/public")));
 app.set("port", process.env.PORT || 4000);
 
 const PORT = app.get("port");
@@ -56,7 +59,7 @@ app.post("/insertseoul", fileUpload.single("foodImage"), (req, res) => {
   const comment = req.body.comment;
   const foodImage = req.file.path;
   console.log(foodImage);
-  console.log(comment);
+  //console.log(comment);
   cloudinary.uploader.upload(req.file.path, (result) => {
     const newFoodList = new FoodListSchema({
       name,
